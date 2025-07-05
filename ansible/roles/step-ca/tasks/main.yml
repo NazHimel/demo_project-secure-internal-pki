@@ -1,0 +1,50 @@
+---
+- name: Ensure Step CA working directory exists
+  file:
+    path: /opt/step-ca
+    state: directory
+    mode: '0755'
+
+- name: Install step CLI
+  get_url:
+    url: https://dl.smallstep.com/gh-release/cli/gh-release-header/v0.28.6/step-cli-0.28.6-1.x86_64.rpm 
+    dest: /tmp/step-cli.rpm
+
+- name: Install step CLI package
+  yum:
+    name: /tmp/step-cli.rpm
+    state: present
+    disable_gpg_check: yes
+
+- name: Install step CA
+  get_url:
+    url: https://dl.smallstep.com/gh-release/certificates/gh-release-header/v0.28.3/step-ca-0.28.3-1.x86_64.rpm
+    dest: /tmp/step-ca.rpm
+
+- name: Install step CA package
+  yum:
+    name: /tmp/step-ca.rpm
+    state: present
+    disable_gpg_check: yes
+
+- name: Ensure ~/.step directory exists
+  file:
+    path: /root/.step
+    state: directory
+    mode: '0700'
+    owner: root
+    group: root
+
+- name: Create step password file
+  copy:
+    dest: /root/.step/password.txt
+    content: "Passw0rd!\n"
+    mode: '0600'
+
+
+- name: Allow HTTPS in firewalld
+  ansible.posix.firewalld:
+    port: 443/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes

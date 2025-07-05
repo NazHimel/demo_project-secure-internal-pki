@@ -1,0 +1,7 @@
+---
+- name: Install and Configure Step CA
+  hosts: ca
+  become: true
+  roles:
+    - step-ca
+
