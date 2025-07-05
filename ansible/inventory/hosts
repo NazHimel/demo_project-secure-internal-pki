@@ -1,0 +1,10 @@
+[webservers]
+web1.internal.lab
+web2.internal.lab
+
+[backend]
+mq.internal.lab
+
+[ca]
+ca.internal.lab
+
